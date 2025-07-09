@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cadastro de Usuários</title>
+</head>
+<body>
+  <h2>Jogadores</h2>
+  <form id="form">
+    <input type="text" id="nome" placeholder="Nome">
+    <input type="email" id="email" placeholder="Email">
+    <button type="submit" id="botao">Cadastrar</button>
+  </form>
+  <ul id="lista"></ul>
+
+<script>
+const url = 'http://localhost:5000/usuarios';
+let editandoId = null; // null quando for novo, número quando for edição
+
+function carregarUsuarios() {
+  fetch(url)
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById('lista').innerHTML = '';
+      data.forEach(u => {
+        document.getElementById('lista').innerHTML += `
+          <li>
+            ${u.nome} (${u.email})
+            <button onclick="editar(${u.id}, '${u.nome}', '${u.email}')">Editar</button>
+            <button onclick="remover(${u.id})">Excluir</button>
+          </li>`;
+      });
+    });
+}
+
+document.getElementById('form').addEventListener('submit', e => {
+  e.preventDefault();
+  const nome = document.getElementById('nome').value;
+  const email = document.getElementById('email').value;
+
+  const metodo = editandoId ? 'PUT' : 'POST';
+  const endpoint = editandoId ? `${url}/${editandoId}` : url;
+
+  fetch(endpoint, {
+    method: metodo,
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({nome, email})
+  }).then(() => {
+    carregarUsuarios();
+    document.getElementById('form').reset();
+    document.getElementById('botao').innerText = 'Cadastrar';
+    editandoId = null;
+  });
+});
+
+function remover(id) {
+  fetch(`${url}/${id}`, { method: 'DELETE' })
+    .then(() => carregarUsuarios());
+}
+
+function editar(id, nome, email) {
+  document.getElementById('nome').value = nome;
+  document.getElementById('email').value = email;
+  document.getElementById('botao').innerText = 'Atualizar';
+  editandoId = id;
+}
+
+carregarUsuarios();
+</script>
+</body>
+</html>

@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro de Aventureiros - Terraria</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Press Start 2P', cursive;
+      background: linear-gradient(180deg, #4a90e2 0%, #2c5282 30%, #1a202c 70%, #0d1117 100%);
+      min-height: 100vh;
+      padding: 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Estrelas no fundo */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(2px 2px at 20% 30%, white, transparent),
+        radial-gradient(2px 2px at 40% 70%, white, transparent),
+        radial-gradient(1px 1px at 90% 40%, white, transparent),
+        radial-gradient(1px 1px at 60% 10%, white, transparent),
+        radial-gradient(2px 2px at 80% 80%, white, transparent),
+        radial-gradient(1px 1px at 10% 60%, white, transparent);
+      background-size: 200px 200px;
+      animation: twinkle 3s infinite;
+      z-index: -1;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: 
+        linear-gradient(45deg, #8B4513 0%, #A0522D  50%, #8B4513 100%);
+      border: 4px solid #654321;
+      border-radius: 0;
+      box-shadow: 
+        inset 0 0 20px rgba(0,0,0,0.5),
+        0 0 30px rgba(0,0,0,0.8);
+      padding: 20px;
+      position: relative;
+      image-rendering: pixelated;
+    }
+
+    .container::before {
+      content: '';
+      position: absolute;
+      top: -4px;
+      left: -4px;
+      right: -4px;
+      bottom: -4px;
+      background: linear-gradient(45deg, #D4AF37, #FFD700, #D4AF37);
+      z-index: -1;
+      border-radius: 0;
+    }
+
+    h2 {
+      color: #FFD700;
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 16px;
+      text-shadow: 
+        2px 2px 0px #8B4513,
+        4px 4px 0px rgba(0,0,0,0.5);
+      letter-spacing: 2px;
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 2px 2px 0px #8B4513, 4px 4px 0px rgba(0,0,0,0.5), 0 0 10px #FFD700; }
+      to { text-shadow: 2px 2px 0px #8B4513, 4px 4px 0px rgba(0,0,0,0.5), 0 0 20px #FFD700, 0 0 30px #FFD700; }
+    }
+
+    .form-container {
+      background: 
+        linear-gradient(135deg, #2F4F4F 0%, #1C3A3A 100%);
+      border: 3px solid #4682B4;
+      padding: 20px;
+      margin-bottom: 20px;
+      position: relative;
+      box-shadow: inset 0 0 15px rgba(0,0,0,0.3);
+    }
+
+    .form-container::before {
+      content: '⚔️ CADASTRO DE AVENTUREIROS ⚔️';
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(45deg, #4682B4, #87CEEB);
+      padding: 5px 15px;
+      font-size: 8px;
+      color: white;
+      text-shadow: 1px 1px 0px #2F4F4F;
+      border: 2px solid #4682B4;
+    }
+
+    #form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .input-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    input[type="text"],
+    input[type="email"] {
+      flex: 1;
+      min-width: 200px;
+      padding: 12px;
+      border: 3px solid #4682B4;
+      background: #1C3A3A;
+      color: #00FF00;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 10px;
+      text-shadow: 1px 1px 0px #000;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus {
+      outline: none;
+      border-color: #FFD700;
+      box-shadow: 
+        inset 0 0 10px rgba(0,0,0,0.5),
+        0 0 15px #FFD700;
+      background: #2F4F4F;
+    }
+
+    input::placeholder {
+      color: #87CEEB;
+      opacity: 0.8;
+    }
+
+    button {
+      padding: 12px 20px;
+      border: 3px solid #D4AF37;
+      background: linear-gradient(45deg, #DAA520, #FFD700, #DAA520);
+      color: #8B4513;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 10px;
+      cursor: pointer;
+      text-shadow: 1px 1px 0px rgba(255,255,255,0.3);
+      box-shadow: 
+        0 4px 0 #B8860B,
+        0 8px 15px rgba(0,0,0,0.3);
+      transition: all 0.1s ease;
+      position: relative;
+      text-transform: uppercase;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 
+        0 6px 0 #B8860B,
+        0 10px 20px rgba(0,0,0,0.4);
+    }
+
+    button:active {
+      transform: translateY(2px);
+      box-shadow: 
+        0 2px 0 #B8860B,
+        0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    .users-section {
+      background: 
+        linear-gradient(135deg, #2F4F4F 0%, #1C3A3A 100%);
+      border: 3px solid #4682B4;
+      padding: 20px;
+      position: relative;
+      box-shadow: inset 0 0 15px rgba(0,0,0,0.3);
+    }
+
+    .users-section::before {
+      content: '👥 AVENTUREIROS REGISTRADOS 👥';
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(45deg, #4682B4, #87CEEB);
+      padding: 5px 15px;
+      font-size: 8px;
+      color: white;
+      text-shadow: 1px 1px 0px #2F4F4F;
+      border: 2px solid #4682B4;
+    }
+
+    .users-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #4682B4;
+    }
+
+    .users-title {
+      font-size: 12px;
+      color: #87CEEB;
+      text-shadow: 1px 1px 0px #000;
+    }
+
+    .users-count {
+      background: linear-gradient(45deg, #DC143C, #FF4500);
+      color: white;
+      padding: 8px 12px;
+      border: 2px solid #8B0000;
+      font-size: 8px;
+      text-shadow: 1px 1px 0px #000;
+      box-shadow: 
+        0 2px 0 #8B0000,
+        0 4px 8px rgba(0,0,0,0.3);
+    }
+
+    #lista {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    #lista li {
+      background: linear-gradient(90deg, #228B22 0%, #32CD32 50%, #228B22 100%);
+      border: 2px solid #006400;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      box-shadow: 
+        0 2px 0 #006400,
+        0 4px 8px rgba(0,0,0,0.3);
+      transition: all 0.1s ease;
+      animation: slideIn 0.3s ease-out;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    #lista li:hover {
+      transform: translateY(-2px);
+      box-shadow: 
+        0 4px 0 #006400,
+        0 6px 12px rgba(0,0,0,0.4);
+    }
+
+    #lista li::before {
+      content: '🏃';
+      position: absolute;
+      left: -15px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px;
+      background: #FFD700;
+      padding: 5px;
+      border: 2px solid #D4AF37;
+      border-radius: 50%;
+    }
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-left: 20px;
+    }
+
+    .user-name {
+      font-size: 10px;
+      color: white;
+      text-shadow: 1px 1px 0px #000;
+    }
+
+    .user-email {
+      color: #FFFF00;
+      font-size: 8px;
+      text-shadow: 1px 1px 0px #000;
+    }
+
+    .delete-btn {
+      background: linear-gradient(45deg, #DC143C, #FF4500, #DC143C);
+      color: white;
+      border: 2px solid #8B0000;
+      padding: 8px 12px;
+      font-size: 8px;
+      box-shadow: 
+        0 2px 0 #8B0000,
+        0 4px 8px rgba(0,0,0,0.3);
+    }
+
+    .delete-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 
+        0 4px 0 #8B0000,
+        0 6px 12px rgba(0,0,0,0.4);
+    }
+
+    .delete-btn:active {
+      transform: translateY(1px);
+      box-shadow: 
+        0 1px 0 #8B0000,
+        0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .empty-state {
+      text-align: center;
+      color: #87CEEB;
+      font-size: 10px;
+      padding: 30px;
+      background: linear-gradient(45deg, #4B0082, #8B008B);
+      border: 2px solid #9400D3;
+      text-shadow: 1px 1px 0px #000;
+      position: relative;
+    }
+
+    .empty-state::before {
+      content: '💀';
+      display: block;
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .health-bar {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(0,0,0,0.7);
+      padding: 10px;
+      border: 2px solid #8B4513;
+      font-size: 8px;
+      color: white;
+      z-index: 1000;
+    }
+
+    .health-bar::before {
+      content: '❤️';
+      font-size: 16px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+        margin: 10px;
+      }
+
+      .input-group {
+        flex-direction: column;
+      }
+
+      input[type="text"],
+      input[type="email"] {
+        min-width: 100%;
+        font-size: 8px;
+      }
+
+      #lista li {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+        padding-left: 15px;
+      }
+
+      #lista li::before {
+        position: relative;
+        left: 0;
+        transform: none;
+        margin-bottom: 10px;
+      }
+
+      .user-info {
+        align-items: center;
+        margin-left: 0;
+      }
+
+      h2 {
+        font-size: 12px;
+      }
+
+      .health-bar {
+        position: relative;
+        top: 0;
+        right: 0;
+        margin-bottom: 20px;
+      }
+    }
+
+    .loading {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border: 2px solid #4682B4;
+      border-top: 2px solid #FFD700;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="health-bar">
+    <span>Sistema Online</span>
+  </div>
+
+  <div class="container">
+    <h2>🏰 REGISTRO DE AVENTUREIROS 🏰</h2>
+    
+    <div class="form-container">
+      <form id="form">
+        <div class="input-group">
+          <input type="text" id="nome" placeholder="Nome do Aventureiro" required>
+          <input type="email" id="email" placeholder="Correio Eletrônico" required>
+        </div>
+        <button type="submit">🗡️ Registrar Aventureiro 🗡️</button>
+      </form>
+    </div>
+
+    <div class="users-section">
+      <div class="users-header">
+        <h3 class="users-title">Guild dos Aventureiros</h3>
+        <span class="users-count" id="users-count">0 Membros</span>
+      </div>
+      <ul id="lista">
+        <li class="empty-state">A guild está vazia... Que tal recrutar alguns aventureiros?</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    const url = 'http://localhost:5000/usuarios';
+
+    // Efeito sonoro simulado
+    function playSound(type) {
+      console.log(`🔊 ${type} sound effect!`);
+    }
+
+    function carregarUsuarios() {
+      fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          const lista = document.getElementById('lista');
+          const usersCount = document.getElementById('users-count');
+          
+          lista.innerHTML = '';
+          usersCount.textContent = `${data.length} Membro${data.length !== 1 ? 's' : ''}`;
+          
+          if (data.length === 0) {
+            lista.innerHTML = '<li class="empty-state">A guild está vazia... Que tal recrutar alguns aventureiros?</li>';
+          } else {
+            data.forEach((u, index) => {
+              setTimeout(() => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                  <div class="user-info">
+                    <div class="user-name">⚔️ ${u.nome}</div>
+                    <div class="user-email">📧 ${u.email}</div>
+                  </div>
+                  <button class="delete-btn" onclick="remover(${u.id})">💀 Expulsar</button>
+                `;
+                lista.appendChild(li);
+                playSound('spawn');
+              }, index * 100);
+            });
+          }
+        })
+        .catch(error => {
+          console.error('Erro ao carregar usuários:', error);
+          document.getElementById('lista').innerHTML = '<li class="empty-state">⚠️ Erro na conexão com o servidor! Verifique se está rodando.</li>';
+        });
+    }
+
+    document.getElementById('form').addEventListener('submit', e => {
+      e.preventDefault();
+      const nome = document.getElementById('nome').value.trim();
+      const email = document.getElementById('email').value.trim();
+      
+      if (!nome || !email) {
+        alert('🚨 Preencha todos os campos, aventureiro!');
+        return;
+      }
+      
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      const originalText = submitBtn.textContent;
+      submitBtn.innerHTML = '<span class="loading"></span> Registrando...';
+      submitBtn.disabled = true;
+      
+      fetch(url, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({nome, email})
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Erro ao cadastrar usuário');
+        }
+        return response.json();
+      })
+      .then(() => {
+        document.getElementById('nome').value = '';
+        document.getElementById('email').value = '';
+        playSound('level_up');
+        carregarUsuarios();
+      })
+      .catch(error => {
+        console.error('Erro:', error);
+        alert('💥 Falha ao registrar aventureiro! Tente novamente.');
+      })
+      .finally(() => {
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+      });
+    });
+
+    function remover(id) {
+      if (confirm('💀 Tem certeza que deseja expulsar este aventureiro da guild?')) {
+        fetch(`${url}/${id}`, { method: 'DELETE' })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Erro ao excluir usuário');
+            }
+            playSound('enemy_death');
+            carregarUsuarios();
+          })
+          .catch(error => {
+            console.error('Erro:', error);
+            alert('⚠️ Erro ao expulsar aventureiro! Tente novamente.');
+          });
+      }
+    }
+
+    // Carregar usuários ao iniciar
+    carregarUsuarios();
+
+    // Efeito de digitação no título
+    const title = document.querySelector('h2');
+    const originalTitle = title.textContent;
+    title.textContent = '';
+    let i = 0;
+    
+    function typeTitle() {
+      if (i < originalTitle.length) {
+        title.textContent += originalTitle.charAt(i);
+        i++;
+        setTimeout(typeTitle, 100);
+      }
+    }
+    
+    setTimeout(typeTitle, 1000);
+  </script>
+</body>
+</html>
